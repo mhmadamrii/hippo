@@ -1,0 +1,1 @@
+import { Access, CollectionConfig } from 'payload/types'

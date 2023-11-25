@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { ArrowRight, Loader2 } from 'lucide-react';
 import { cn } from '~/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-// import { trpc } from '~/trpc/client';
+import { trpc } from '~/trpc/client';
 import { toast } from 'sonner';
 import { ZodError } from 'zod';
 import { useRouter } from 'next/navigation';
@@ -29,14 +29,22 @@ export default function SignUn() {
     resolver: zodResolver(AuthCredentialsValidator),
   });
 
-  const isLoading = true;
+  // const { mutate } = trpc.auth.createPayloadUser.useMutation({
+  //   onError: (err: unknown) => {
+  //       console.log(err)
+  //   },
 
-  //   const { mutate, isLoading } = trpc.auth.createPayloadUser.useMutation({
-  //     onError: (err: unknown) => {
-  //         console.log(err)
-  //     },
+  // })
 
-  //   })
+  const { data } = trpc.anyApiROute.useQuery();
+  console.log(data);
+
+  const onSubmit = ({ email, password }: TAuthCredentialsValidator) => {
+    // do something submit here
+  };
+
+  const isLoading = false;
+
   return (
     <div className="container relative flex pt-20 flex-col items-center justify-center lg:px-0">
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
@@ -59,7 +67,7 @@ export default function SignUn() {
         </div>
 
         <div className="grid gap-6">
-          <form>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid gap-2">
               <div className="grid gap-1 py-2">
                 <Label htmlFor="email">Email</Label>
