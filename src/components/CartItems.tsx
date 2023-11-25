@@ -2,11 +2,11 @@ import Image from 'next/image';
 
 import { PRODUCT_CATEGORIES } from '~/config';
 import { useCart } from '~/hooks/use-cart';
-import { Product } from '~/payload-types';
+// import { Product } from '~/payload-types';
 import { formatPrice } from '~/lib/utils';
 import { ImageIcon, X } from 'lucide-react';
 
-export default function CartItem({ product }: { product: Product }) {
+export default function CartItem({ product }: { product: any }) {
   const { removeItem } = useCart();
   const { image } = product.images[0];
   const label = PRODUCT_CATEGORIES.find(
