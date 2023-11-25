@@ -23,7 +23,8 @@ import { useCart } from '~/hooks/use-cart';
 export default function Cart() {
   const [isMounted, setIsMounted] = useState<boolean>(false);
   const { items } = useCart();
-  const itemCount = items.length;
+  // const itemCount = items.length;
+  const itemCount = 3;
   const fee = 1;
   const cartTotal = items.reduce(
     (total, { product }) => total + product.price,
@@ -47,8 +48,7 @@ export default function Cart() {
       </SheetTrigger>
       <SheetContent className="flex w-full flex-col pr-0 sm:max-w-lg">
         <SheetHeader className="space-y-2.5 pr-6">
-          {/* <SheetTitle>Cart ({itemCount})</SheetTitle> */}
-          <SheetTitle>0</SheetTitle>
+          <SheetTitle>Cart({itemCount})</SheetTitle>
         </SheetHeader>
         {itemCount > 0 ? (
           <>
@@ -61,6 +61,7 @@ export default function Cart() {
             </div>
             <div className="space-y-4 pr-6">
               <Separator />
+              <h1>Hello world</h1>
               <div className="space-y-1.5 text-sm">
                 <div className="flex">
                   <span className="flex-1">Shipping</span>
