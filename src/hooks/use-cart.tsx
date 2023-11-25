@@ -1,14 +1,16 @@
-import { Product } from '~/payload-types';
+// import { Product } from '~/payload-types';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 export type CartItem = {
-  product: Product;
+  // product: Product;
+  product: any;
 };
 
 type CartState = {
   items: CartItem[];
-  addItem: (product: Product) => void;
+  // addItem: (product: Product) => void;
+  addItem: (product: any) => void;
   removeItem: (productId: string) => void;
   clearCart: () => void;
 };
