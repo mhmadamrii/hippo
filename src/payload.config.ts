@@ -1,18 +1,24 @@
 import path from 'path';
+import dotenv from 'dotenv';
 
 import { buildConfig } from 'payload/config';
 import { mongooseAdapter } from '@payloadcms/db-mongodb';
 import { slateEditor } from '@payloadcms/richtext-slate';
 import { webpackBundler } from '@payloadcms/bundler-webpack';
+import { Users } from './collections/users.collection';
+
+dotenv.config({
+  path: path.resolve(__dirname, '../.env'),
+});
 
 export default buildConfig({
   serverURL: process.env.NEXT_PUBLIC_SERVER_URL || '',
-  collections: [],
+  collections: [Users],
   routes: {
     admin: '/sell',
   },
   admin: {
-    // user: 'users',
+    user: 'users',
     bundler: webpackBundler(),
     meta: {
       titleSuffix: '- DigitalHippo',

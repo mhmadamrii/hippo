@@ -29,18 +29,18 @@ export default function SignUn() {
     resolver: zodResolver(AuthCredentialsValidator),
   });
 
-  // const { mutate } = trpc.auth.createPayloadUser.useMutation({
-  //   onError: (err: unknown) => {
-  //       console.log(err)
-  //   },
+  const { mutate } = trpc.auth.createPayloadUser.useMutation({
+    onError: (err: unknown) => {
+      console.log(err);
+    },
+  });
 
-  // })
-
-  const { data } = trpc.anyApiROute.useQuery();
-  console.log(data);
+  // const { data } = trpc.anyApiROute.useQuery();
+  // console.log(data);
 
   const onSubmit = ({ email, password }: TAuthCredentialsValidator) => {
     // do something submit here
+    mutate({ email, password });
   };
 
   const isLoading = false;
