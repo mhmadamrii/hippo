@@ -6,9 +6,14 @@ import Cart from './Cart';
 
 import { buttonVariants } from './ui/button';
 import { Icons } from './Icons';
+import { cookies } from 'next/headers';
+import { getServerSideUser } from '~/lib/payload-utils';
 
 export default async function Navbar() {
-  let user = null;
+  const nextCookies = cookies();
+  console.log(nextCookies);
+  const { user } = await getServerSideUser(nextCookies);
+
   return (
     <nav className="bg-white sticky z- 50 top-0 inset-x-0 h-16">
       <header>

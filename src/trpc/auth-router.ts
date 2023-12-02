@@ -35,4 +35,29 @@ export const authRouter = router({
         return { success: true, sentToEmail: email };
       },
     ),
+  signIn: publicProcedure
+    .input(AuthCredentialsValidator)
+    .mutation(async ({ input, ctx }) => {
+      const { email, password } = input;
+      // @ts-ignore
+      const { res } = ctx;
+
+      const payload = await getPayloadClient();
+
+      try {
+        await payload.login({
+          collection: 'users',
+          data: {
+            email,
+            password,
+          },
+          res,
+        });
+
+        return { success: true };
+      } catch (err) {
+        console.log('err', err);
+        throw new TRPCError({ code: 'UNAUTHORIZED' });
+      }
+    }),
 });

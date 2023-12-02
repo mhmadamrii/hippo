@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { ArrowRight, Loader2 } from 'lucide-react';
 import { cn } from '~/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-// import { trpc } from '~/trpc/client';
+import { trpc } from '~/trpc/client';
 import { toast } from 'sonner';
 import { ZodError } from 'zod';
 import {
@@ -33,15 +33,32 @@ export default function SignIn() {
     resolver: zodResolver(AuthCredentialsValidator),
   });
 
-  //   const { mutate: signIn, isLoading } = trpc.auth.createPayloadUser.useMutation({
-  //     onError: (err: unknown) => {
-  //         console.log(err)
-  //     },
+  const { mutate: signIn, isLoading } = trpc.auth.signIn.useMutation({
+    onError: (err) => {
+      if (err.data?.code === 'UNAUTHORIZED') {
+        toast.error('Invalid email or password.');
+      }
+      console.log(err);
+    },
+    onSuccess: () => {
+      toast.success('Signed in successfully');
 
-  //   })
+      if (origin) {
+        router.push(`/${origin}`);
+        return;
+      }
+
+      if (isSeller) {
+        router.push('/sell');
+        return;
+      }
+
+      router.push('/');
+    },
+  });
 
   const onSubmit = ({ email, password }: TAuthCredentialsValidator) => {
-    // signIn({ email, password })
+    signIn({ email, password });
   };
 
   const continueAsSeller = () => {
@@ -52,15 +69,13 @@ export default function SignIn() {
     router.replace('/sign-in', undefined);
   };
 
-  const isLoading = false;
-
   return (
     <div className="container relative flex pt-20 flex-col items-center justify-center lg:px-0">
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
         <div className="flex flex-col items-center space-y-2 text-center">
           <Icons.logo className="h-20 w-20" />
           <h1 className="text-2xl font-semibold tracking-tight">
-            Sign-in to your accout
+            Sign in to your {isSeller ? 'seller' : ''} account
           </h1>
 
           <Link

@@ -6,9 +6,9 @@ export const Users: CollectionConfig = {
   auth: {
     verify: {
       generateEmailHTML: ({ token }) => {
-        return `<p>Hello pls verify email</p>`
-      }
-    }
+        return `<p>Hello pls verify email</p>`;
+      },
+    },
   },
   access: {
     read: () => true,

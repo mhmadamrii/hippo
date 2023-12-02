@@ -44,10 +44,10 @@ export default function SignUn() {
 
       toast.error('Something went wrong. Please try again.');
     },
+    onSuccess: () => {
+      toast.success('Successfully sign-up!');
+    },
   });
-
-  // const { data } = trpc.anyApiROute.useQuery();
-  // console.log(data);
 
   const onSubmit = ({ email, password }: TAuthCredentialsValidator) => {
     // do something submit here
