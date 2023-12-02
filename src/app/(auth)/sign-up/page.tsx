@@ -30,8 +30,19 @@ export default function SignUn() {
   });
 
   const { mutate } = trpc.auth.createPayloadUser.useMutation({
-    onError: (err: unknown) => {
+    onError: (err) => {
       console.log(err);
+      if (err.data?.code === 'CONFLICT') {
+        toast.error('This email already used!');
+      }
+
+      if (err instanceof ZodError) {
+        toast.error(err.issues[0].message);
+
+        return;
+      }
+
+      toast.error('Something went wrong. Please try again.');
     },
   });
 

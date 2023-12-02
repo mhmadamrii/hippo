@@ -8,7 +8,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 // import { trpc } from '~/trpc/client';
 import { toast } from 'sonner';
 import { ZodError } from 'zod';
-import { useRouter } from 'next/navigation';
 import {
   TAuthCredentialsValidator,
   AuthCredentialsValidator,
@@ -19,8 +18,13 @@ import { Button, buttonVariants } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { Label } from '~/components/ui/label';
 import { useForm } from 'react-hook-form';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function SignIn() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const isSeller = searchParams.get('as') === 'seller';
+  const origin = searchParams.get('origin');
   const {
     register,
     handleSubmit,
@@ -29,21 +33,34 @@ export default function SignIn() {
     resolver: zodResolver(AuthCredentialsValidator),
   });
 
-  const isLoading = true;
-
-  //   const { mutate, isLoading } = trpc.auth.createPayloadUser.useMutation({
+  //   const { mutate: signIn, isLoading } = trpc.auth.createPayloadUser.useMutation({
   //     onError: (err: unknown) => {
   //         console.log(err)
   //     },
 
   //   })
+
+  const onSubmit = ({ email, password }: TAuthCredentialsValidator) => {
+    // signIn({ email, password })
+  };
+
+  const continueAsSeller = () => {
+    router.push('?as=seller');
+  };
+
+  const continueAsBuyer = () => {
+    router.replace('/sign-in', undefined);
+  };
+
+  const isLoading = false;
+
   return (
     <div className="container relative flex pt-20 flex-col items-center justify-center lg:px-0">
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
         <div className="flex flex-col items-center space-y-2 text-center">
           <Icons.logo className="h-20 w-20" />
           <h1 className="text-2xl font-semibold tracking-tight">
-            Create an account
+            Sign-in to your accout
           </h1>
 
           <Link
@@ -51,15 +68,15 @@ export default function SignIn() {
               variant: 'link',
               className: 'gap-1.5',
             })}
-            href="/sign-in"
+            href="/sign-up"
           >
-            Already have an account? Sign-in
+            Don&apos;t have an account?
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
 
         <div className="grid gap-6">
-          <form>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid gap-2">
               <div className="grid gap-1 py-2">
                 <Label htmlFor="email">Email</Label>
@@ -98,6 +115,38 @@ export default function SignIn() {
               </Button>
             </div>
           </form>
+
+          <div className="relative">
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 flex items-center"
+            >
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                or
+              </span>
+            </div>
+          </div>
+
+          {isSeller ? (
+            <Button
+              onClick={continueAsBuyer}
+              variant="secondary"
+              disabled={isLoading}
+            >
+              Continue as customer
+            </Button>
+          ) : (
+            <Button
+              onClick={continueAsSeller}
+              variant="secondary"
+              disabled={isLoading}
+            >
+              Continue as seller
+            </Button>
+          )}
         </div>
       </div>
     </div>
